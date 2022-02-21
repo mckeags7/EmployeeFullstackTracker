@@ -1,0 +1,29 @@
+{
+  "name": "employee-tracker",
+  "version": "1.0.0",
+  "description": "Track employees and their roles, salaries, departments and managers",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mckeags7/EmployeeTrackingSystem.git"
+  },
+  "author": "Sean Mckeag",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mckeags7/EmployeeTrackingSystem/issues"
+  },
+  "homepage": "https://github.com/mckeags7@gmail.com/EmployeeTrackingSystem#readme",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "express": "^4.17.3",
+    "inquirer": "^7.3.3",
+    "jest": "^27.5.1",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.3.3",
+    "nodemon": "^2.0.4"
+  }
+}
