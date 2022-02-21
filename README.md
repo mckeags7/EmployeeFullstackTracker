@@ -49,7 +49,7 @@
 <h3 id='use'>How to Use the Project</h3>
 <p>To use the project open the Employee-Tracker folder. In terminal run node server.js From the dropdown choose the task you want to complete, then follow the prompts for entering the information. A table will display after every task is complete and show up-to-date information for the user.</p><br>
 
-<p> Here is a link to a video detailing the project: <a href = "https://www.loom.com/share/2ca9e68f28f64b18826c420d24dbec8e"></a>
+<p> Here is a link to a video detailing the project: <a href = "https://www.loom.com/share/2ca9e68f28f64b18826c420d24dbec8e">Using the project</a>
 <p><br>
 <a href="#top" id="start">(Back to Top of Page)</a><br>
 <br>
