@@ -11,7 +11,7 @@ var connection = mysql.createConnection({
     port: 3306,
     user: "root",
     password: "Db4!X92$0",
-    database: "employee_tracker"
+    database: "studentbooks"
   });
 
 // connect to the mysql server and sql database
@@ -29,37 +29,31 @@ connection.connect(function(err) {
         name: 'action',
         message: 'What do you want to do?',
         choices: [
-          'Add department',
-          'Add role',
-          'Add employee',
-          'Update employee role',
-          'Update employee Vice President',
-          'View departments',
-          'View employees',
-          'View employees by department',
-          'View roles',
+          'Add readings',
+          'Add books',
+          'Add students',
+          'Update student books',
+          'View readings',
+          'View students',
+          'View books',
           'Exit',
         ]
       })
       .then(function(answer) {
         // based on their answer, either call the bid or the post functions
-        if (answer.action === 'Add department') {
-          addDepartment();
-        } else if(answer.action === "Add role") {
-          addRole()
-        } else if(answer.action === "Add employee") {
-            addEmployee();
-        } else if(answer.action === "Update employee role") {
-            updateEmployeeRole();
-        } else if(answer.action === "Update employee Vice President") {
-            updateEmployeeVicePresident();
-        } else if(answer.action === "View departments") {
+        if (answer.action === 'Add readings') {
+          addReadings();
+        } else if(answer.action === "Add books") {
+          addBooks()
+        } else if(answer.action === "Add student") {
+            addStudent();
+        } else if(answer.action === "Update student books") {
+            updateStudentBooks();
+        } else if(answer.action === "View readings") {
             viewDepartments();
-        } else if(answer.action === "View employees") {
+        } else if(answer.action === "View students") {
             viewEmployees();
-        } else if(answer.action === "View employees by department") {
-            viewEmployeesByDepartment();
-          } else if(answer.action === "View roles") {
+        } else if(answer.action === "View books") {
             viewRoles();
         } else if(answer.action === "Exit") {
           connection.end();
@@ -67,180 +61,125 @@ connection.connect(function(err) {
       });
   }
 
-  function addDepartment() {
+  function addReadings() {
     inquirer.prompt([       
         {
          type: 'input',
          name: 'name',
-         message: 'Please enter the new department name.'
+         message: 'Please enter the new readings name.'
          }
         ])
          .then(function(answer) {
             // when finished prompting, insert a new item into the db with that info
             connection.query(
-              "INSERT INTO department SET ?",
+              "INSERT INTO readings SET ?",
              {
                 name: answer.name,
               },
               function(err, res) {
                 if (err) throw err;
                 console.table(res);
-                console.log("Your department was created successfully!");
-                viewDepartments();
+                console.log("Your readings were created successfully!");
+                viewReadings();
               });
             })
           }
   
-    function addRole() {
+    function addBooks() {
       inquirer.prompt([       
         {
             type: 'input',
+            name: 'id', 
+            message: 'Please enter the new book id.'
+         },
+         {
+            type: 'input',
             name: 'title', 
-            message: 'Please enter the new role.'
+            message: 'Please enter the book title.'
          },
          {
             type: 'input',
-            name: 'salary', 
-            message: 'Please enter the associated salary.'
-         },
-         {
-            type: 'input',
-            name: 'department_id', 
-            message: 'Please enter the department id this role is a part of.',
+            name: 'reading_id', 
+            message: 'Please enter the reading id for this book.',
           },
          ])
          .then(function(answer) {
             // when finished prompting, insert a new item into the db with that info
             connection.query(
-              "Insert into role set ?",
+              "Insert into books set ?",
               {
+               id: answer.id, 
                title: answer.title, 
-               salary: answer.salary, 
-               department_id: answer.department_id
+               reading_id: answer.reading_id
               },
               function(err) {
                 if (err) throw err;
-                console.log("Your role was created successfully!");
-                viewRoles();
+                console.log("Your books' library was created successfully!");
+                viewBooks();
               })
-         })
-        }
-        
-        let managersArr = [];
-function selectManager() {
-  managersArr= []
-  connection.query("SELECT * FROM employee", function(err, res) {
-    if (err) throw err
-    for (var i = 0; i < res.length; i++) {
-      managersArr.push
-      ({
-        name: res[i].first_name + "  " + res[i].last_name,
-        value: res[i].id
-      });
-    }
-  })
-  return managersArr;
-};      
+         }),
 
 
-
-       function addEmployee() {
+       function addStudents() {
         inquirer.prompt([       
             {    
                 type: 'input',
-                name: 'first_name',
-                message: 'Please enter the first name of the new employee.'
+                name: 'id',
+                message: 'Please enter the id of the new student.'
                 },
                 {
                 type: 'input',
-                name: 'last_name',
-                message: 'Please enter the last name of the new employee.'
-                },
-                {
-                  type: 'input',
-                  name: 'role',
-                  message: 'Please enter the role id of the new employee.'
-                },
-                {
-                  type: 'list',
-                  name: 'manager_id',
-                  message: "Please choose the new employee's Vice President.",
-                  choices: selectManager()
-                
+                name: 'name',
+                message: 'Please enter the first and last name of the new student.'
                 }
-               ])
+               
              .then(function(answer) {
                 // when finished prompting, insert a new item into the db with that info
                 connection.query(
-                  "INSERT INTO employee SET ?",
+                  "INSERT INTO students SET ?",
                   {
-                    first_name: answer.first_name,
-                    last_name: answer.last_name,
-                    role_id: answer.role_id,
-                    manager_id: answer.manager_id,
+                    id: answer.id,
+                    name: answer.name,
                   },
                   function(err) {
                     if (err) throw err;
-                    console.log("Your employee was created successfully!");
-                    viewEmployees();
+                    console.log("Your student was created successfully!");
+                    viewStudents();
                   });
-              })
-           }
+              }),
+        
 
 
-    function updateEmployeeRole() {
+                function updateStudentBooks() {
         inquirer.prompt([  
           {
             type: 'input',
-            name: 'employee_update', 
-            message: 'Please enter the employee id whose role you want to update.'
+            name: 'student_update', 
+            message: 'Please enter the student id whose books you want to update.'
          },
             {
                 type: 'input',
-                name: 'employee_role_update', 
-                message: 'Please enter the updated role id for the employee.'
+                name: 'student_books_update', 
+                message: 'Please enter the updated book id for the student.'
              }    
          ])
              .then(function(answer) {
                 // when finished prompting, insert a new item into the db with that info
                 connection.query(
-                  'Update employee set role_id = ? where id = ?',
-                  [answer.employee_role_update, answer.employee_update],  
+                  'Update student set books_id = ? where id = ?',
+                  [answer.student_books_update, answer.student_update],  
                 function(err) {
                     if (err) throw err;
-                    viewEmployees();
+                    viewStudents();
                   });
-              })
-           }
+              }),
+           
+      
 
-           function updateEmployeeVicePresident() {
-            inquirer.prompt([  
-              {
-                type: 'input',
-                name: 'employee_vp_update', 
-                message: 'Please enter the id of the employee whose Vice President you want to update.'
-             },
-                {
-                    type: 'input',
-                    name: 'vp_update', 
-                    message: 'Please enter the id of the updated Vice President for the employee.'
-                 }    
-             ])
-                 .then(function(answer) {
-                    // when finished prompting, insert a new item into the db with that info
-                    connection.query(
-                      'Update employee SET manager_id = ? where id = ?',
-                      [answer.vp_update, answer.employee_vp_update],  
-                    function(err) {
-                        if (err) throw err;
-                        viewEmployees();
-                      });
-                  })
-               }
-
-            function viewDepartments() {
-                console.log("Selecting all departments...\n");
-                connection.query("SELECT * FROM Department", function(err, res) {
+         
+            function viewReadings() {
+                console.log("Selecting all readings from the list...\n");
+                connection.query("SELECT * FROM readings", function(err, res) {
                   if (err) throw err;
                   // Log all results of the SELECT statement
                   console.table(res);
@@ -248,46 +187,34 @@ function selectManager() {
                 });
               }
 
-          function viewEmployees() {
-            console.log("Selecting all employees...\n");
-            connection.query("SELECT employee.id AS id, employee.first_name AS first_name, employee.last_name AS last_name, role.title, manager.first_name AS manager FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN employee manager ON manager.id = employee.manager_id", function(err, res) {
+          function viewStudents() {
+            console.log("Selecting all students from the list...\n");
+            connection.query("SELECT student.id AS id, student.name AS name, student.student_id AS student_id, books.title, JOIN books ON student.book_id = books.id LEFT JOIN student readings ON readings.id = student.readings_id", function(err, res) {
               if (err) throw err;
               // Log all results of the SELECT statement
               console.table(res);
               start();
-            });
-          }
-
-          function viewEmployeesByDepartment() {
-            inquirer.prompt([  
-              {
-                type: 'input',
-                name: 'employee_department_view', 
-                message: 'Please enter the name of the department you want to view.', 
-              }  
-             ])
-             .then(function(answer) {
-            console.log("Selecting department...\n");
-            connection.query(
-              "SELECT employee.first_name, employee.last_name, role.title, role.salary, department.name from role INNER JOIN employee on employee.role_id = role.id INNER JOIN department on department.id = role.id where department.name = ?",
-            [answer.employee_department_view],  
-            function(err, res) {
-                if (err) throw err;
-                console.table(res);
-                //viewDepartments();
-                start();
-              });
-            })
-          }
+            },
+        
         
           
-          function viewRoles() {
-            console.log("Selecting all roles...\n");
-            connection.query("SELECT role.id AS id, role.title AS title, role.salary AS salary, department.name AS department FROM role LEFT JOIN department ON department_id = department.id", function(err, res) {
+          function viewBooks() {
+            console.log("Selecting all books from the list...\n");
+            connection.query("SELECT books.id AS id, books.title AS title, readings.name AS readings FROM books LEFT JOIN readings ON reading_id = readings.id", function(err, res) {
               if (err) throw err;
               console.table(res);
               start();
-            });
-          }
+            
+            
+          
+            })
 
-     
+            sequelize.sync({ force: false }).then(() => {
+              app.listen(PORT, () => console.log('Now listening'));
+            })
+          })
+        }
+      }
+        ])
+  }
+    }
